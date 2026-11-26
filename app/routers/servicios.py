@@ -23,3 +23,12 @@ def crear(data: schemas.ServicioCreate, db: Session = Depends(get_db)):
 @router.get("", response_model=list[schemas.ServicioRead])
 def listar(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
     return db.scalars(select(models.Servicio).offset(skip).limit(limit)).all()
+
+
+
+@router.get("/{servicio_id}", response_model=schemas.ServicioRead)
+def obtener(servicio_id: int, db: Session = Depends(get_db)):
+    servicio = db.get(models.Servicio, servicio_id)
+    if not servicio:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Servicio no encontrado")
+    return servicio

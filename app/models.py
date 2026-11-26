@@ -27,4 +27,19 @@ class Usuario(Base):
     rol: Mapped[str] = mapped_column(String(20), default="cliente")  # ¿qué rol por defecto?
     activo: Mapped[bool] = mapped_column(Boolean, default=True)
     telegram_chat_id: Mapped[str | None] = mapped_column(String(50))   # es opcional
+    telefono: Mapped[str | None] = mapped_column(String(20), unique=True)
+    creado_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+class Cita(Base):
+    __tablename__ = "citas"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    cliente_id:  Mapped[int] = mapped_column(ForeignKey("usuarios.id"), index=True)
+    empleado_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id"))
+    servicio_id: Mapped[int] = mapped_column(ForeignKey("servicios.id")) 
+    inicio: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    fin: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    estado: Mapped[str] = mapped_column(String(20), default="pendiente")
+    notas: Mapped[str | None] = mapped_column(String (500))
+    anticipo_pagado: Mapped[bool] = mapped_column(Boolean, default=False)
     creado_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

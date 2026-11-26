@@ -35,7 +35,7 @@ class Cita(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     cliente_id:  Mapped[int] = mapped_column(ForeignKey("usuarios.id"), index=True)
-    empleado_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id"))
+    empleado_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id"), index=True)
     servicio_id: Mapped[int] = mapped_column(ForeignKey("servicios.id")) 
     inicio: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     fin: Mapped[datetime] = mapped_column(DateTime(timezone=True))
@@ -48,7 +48,7 @@ class Bloqueo(Base):
     __tablename__ = "bloqueos"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id"))
+    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id"),index=True)
     inicio: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     fin: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     motivo: Mapped[str | None] = mapped_column(String (200))

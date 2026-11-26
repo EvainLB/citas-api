@@ -1,3 +1,4 @@
+from pydantic import NaiveDatetime
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -22,3 +23,19 @@ class ServicioUpdate(BaseModel):
     precio: float | None = Field(default=None, ge=0)
     anticipo: float | None = Field(default=None, ge=0)
     activo: bool | None = None
+
+class CitaCreate(BaseModel):
+    cliente_id: int
+    empleado_id: int
+    servicio_id: int
+    inicio: NaiveDatetime
+    notas: str | None = Field(default=None, max_length=500)
+
+
+class CitaRead(CitaCreate):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    fin: NaiveDatetime
+    estado: str
+    anticipo_pagado: bool

@@ -43,3 +43,14 @@ class Cita(Base):
     notas: Mapped[str | None] = mapped_column(String (500))
     anticipo_pagado: Mapped[bool] = mapped_column(Boolean, default=False)
     creado_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+class Bloqueo(Base):
+    __tablename__ = "bloqueos"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id"))
+    inicio: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    fin: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    motivo: Mapped[str | None] = mapped_column(String (200))
+
+

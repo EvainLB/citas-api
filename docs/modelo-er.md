@@ -45,4 +45,16 @@ erDiagram
         datetime fin
         string motivo
     }
+
+        USUARIOS {
+        int id PK
+        string email UK
+        string password_hash
+        string nombre
+        string rol
+        boolean activo
+        string telegram_chat_id
+        string telefono UK
+        datetime creado_en
+    }
 ```

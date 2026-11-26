@@ -41,3 +41,24 @@ def borrar(servicio_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Servicio no encontrado")
     servicio.activo = False
     db.commit()
+
+@router.patch("/{servicio_id}", response_model=schemas.ServicioRead)
+def editar(servicio_id: int, data: schemas.ServicioUpdate, db: Session = Depends(get_db)):
+    servicio = db.get(models.Servicio, servicio_id)
+    if not servicio:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Servicio no encontrado")
+    cambios = data.model_dump(exclude_unset=True)
+    if "nombre" in cambios:
+        repetido = db.scalar(
+            select(models.Servicio).where(
+                models.Servicio.nombre == cambios["nombre"],
+                models.Servicio.id != servicio_id,
+            )
+        )
+        if repetido:
+            raise HTTPException(status.HTTP_409_CONFLICT, "Ya existe un servicio con ese nombre")
+    for campo, valor in cambios.items():
+        setattr(servicio, campo, valor)
+    db.commit()
+    db.refresh(servicio)
+    return servicio

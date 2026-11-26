@@ -32,3 +32,12 @@ def obtener(servicio_id: int, db: Session = Depends(get_db)):
     if not servicio:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Servicio no encontrado")
     return servicio
+
+
+@router.delete("/{servicio_id}", status_code=status.HTTP_204_NO_CONTENT)
+def borrar(servicio_id: int, db: Session = Depends(get_db)):
+    servicio = db.get(models.Servicio, servicio_id)
+    if not servicio:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Servicio no encontrado")
+    servicio.activo = False
+    db.commit()
